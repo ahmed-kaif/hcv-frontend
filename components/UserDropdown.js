@@ -1,13 +1,21 @@
 // components/UserDropdown.jsx
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 import { useAuth } from '@/providers/AuthProvider';
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const dropdownRef = useRef(null);
   const { user, logout } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -22,14 +30,25 @@ export default function UserDropdown() {
   }, []);
 
   const handleLogout = () => {
+    Cookies.remove('token');
     logout();
-    router.push('/login');
+    if (isMounted) {
+      router.push('/login');
+    }
   };
 
   const handleProfile = () => {
     setIsOpen(false);
-    router.push('/profile');
+    if (isMounted) {
+      router.push('/profile');
+    }
   };
+
+  if (!isMounted) {
+    return (
+      <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse"></div>
+    );
+  }
 
   return (
     <div className="relative" ref={dropdownRef}>

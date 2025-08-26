@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import ProtectedRoute from '../../components/ProtectedRoute';
-import api from '../../lib/api';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import api from '@/lib/api';
 
 // Label mapping
 const RESULT_LABELS = {

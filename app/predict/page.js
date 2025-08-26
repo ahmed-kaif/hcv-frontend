@@ -1,4 +1,3 @@
-// app/predict/page.js
 'use client';
 
 import { useState } from 'react';

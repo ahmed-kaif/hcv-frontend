@@ -1,4 +1,3 @@
-// app/dashboard/page.js
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -116,7 +115,6 @@ const deletePrediction = async (predictionId) => {
               </Link>
             </div>
           ) : (
-           // Replace the table section with this responsive version
 <div>
   {/* Desktop Table View */}
   <div className="hidden md:block bg-white rounded-lg shadow-md overflow-hidden">

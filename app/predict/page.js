@@ -226,7 +226,6 @@ export default function Predict() {
                       type="number"
                       name="BIL"
                       value={formData.BIL}
-                      // app/predict/page.js (continued)
                       onChange={handleChange}
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
@@ -322,7 +321,7 @@ export default function Predict() {
 
           {/* Prediction Results */}
           {prediction && (
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-lg shadow-md p-6" id="prediction-results">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Prediction Results</h2>
               
               {(() => {
@@ -331,7 +330,7 @@ export default function Predict() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                       <span className="text-lg font-medium text-gray-700">Prediction ID:</span>
-                      <span className="text-lg font-semibold">{prediction.id}</span>
+                      <span className="text-lg font-semibold text-gray-900">{prediction.id}</span>
                     </div>
 
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -360,7 +359,7 @@ export default function Predict() {
 
                     <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                       <span className="text-lg font-medium text-gray-700">Date:</span>
-                      <span className="text-lg">
+                      <span className="text-lg text-gray-900">
                         {new Date(prediction.created_at).toLocaleString()}
                       </span>
                     </div>
@@ -433,7 +432,7 @@ export default function Predict() {
                     {/* Test Parameters Summary */}
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg">
                       <h3 className="text-lg font-semibold text-gray-800 mb-3">Test Parameters</h3>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm">
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-900">
                         <div><span className="font-medium">ALB:</span> {prediction.ALB}</div>
                         <div><span className="font-medium">ALP:</span> {prediction.ALP}</div>
                         <div><span className="font-medium">AST:</span> {prediction.AST}</div>

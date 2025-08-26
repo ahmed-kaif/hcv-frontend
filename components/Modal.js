@@ -9,7 +9,7 @@ export default function Modal({ isOpen, onClose, children }) {
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay - with lower z-index */}
         <div 
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-40" 
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-45" 
           aria-hidden="true"
           onClick={onClose}
         ></div>

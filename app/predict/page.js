@@ -102,7 +102,7 @@ export default function Predict() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
-                      ALP <span className="text-red-500">*</span>
+                      ALP (Alkaline Phosphatase) <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="number"

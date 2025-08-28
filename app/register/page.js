@@ -42,7 +42,7 @@ export default function Register() {
     try {
       await register(formData.name, formData.email, formData.password);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Registration failed. Email might already be in use.');
+      setError(err.response?.data?.detail.msg || 'Registration failed. Email might already be in use.');
     } finally {
       setLoading(false);
     }

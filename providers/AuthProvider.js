@@ -19,9 +19,7 @@ export function AuthProvider({ children }) {
   const checkUser = async () => {
     try {
       const token = Cookies.get('access_token');
-      if (token) {
-        setUser({ token });
-      }
+      if (token) setUser({ token });
     } catch (error) {
       console.error('Auth check failed:', error);
     } finally {
@@ -53,10 +51,27 @@ export function AuthProvider({ children }) {
 
   const register = async (name, email, password) => {
     try {
+      // Use axios instance to register
       await api.post('/auth/register', { name, email, password });
+      // Auto-login after registration
       await login(email, password);
     } catch (error) {
       throw error;
+    }
+  };
+
+  const googleLogin = async () => {
+    try {
+      const response = await api.get('/auth/google-login'); // use axios for consistency
+      const data = response.data;
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        console.error('No Google authorization URL received');
+      }
+    } catch (error) {
+      console.error('Google login failed:', error);
     }
   };
 
@@ -67,7 +82,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, googleLogin, loading }}>
       {children}
     </AuthContext.Provider>
   );

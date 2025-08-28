@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '../../providers/AuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import Link from 'next/link';
 
 export default function Register() {
-  const { register } = useAuth();
+  const { register, googleLogin } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -25,7 +25,7 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -42,26 +42,17 @@ export default function Register() {
     try {
       await register(formData.name, formData.email, formData.password);
     } catch (err) {
-      setError(err.response?.data?.detail.msg || 'Registration failed. Email might already be in use.');
-    } finally {
+      const message =
+        err.response?.data?.detail?.msg ||
+        err.response?.data?.detail ||
+        err.message ||
+        'Registration failed. Email might already be in use.';
+      setError(message);
+    }
+    finally {
       setLoading(false);
     }
   };
-
-  const handleGoogleLogin = async () => {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/google-login`);
-    const data = await response.json();
-    
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      console.error('No authorization URL received');
-    }
-  } catch (error) {
-    console.error('Failed to initiate Google login:', error);
-  }
-};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -77,7 +68,7 @@ export default function Register() {
             </Link>
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
             <div className="rounded-md bg-red-50 p-4">
@@ -93,7 +84,7 @@ export default function Register() {
               </div>
             </div>
           )}
-          
+
           <div className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -111,7 +102,7 @@ export default function Register() {
                 placeholder="John Doe"
               />
             </div>
-            
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email Address
@@ -128,7 +119,7 @@ export default function Register() {
                 placeholder="john@example.com"
               />
             </div>
-            
+
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
@@ -146,7 +137,7 @@ export default function Register() {
               />
               <p className="mt-1 text-sm text-gray-500">Must be at least 6 characters</p>
             </div>
-            
+
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
                 Confirm Password
@@ -198,7 +189,7 @@ export default function Register() {
             <div className="mt-6">
               <button
                 type="button"
-                onClick={handleGoogleLogin}
+                onClick={googleLogin}
                 className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200"
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
@@ -209,20 +200,20 @@ export default function Register() {
                   <path
                     fill="#34A853"
                     d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    />
-                    <path                 fill="#FBBC05"
+                  />
+                  <path fill="#FBBC05"
                     d="M5.84 14.3a7.41 7.41 0 010-4.6V7.86H2.18a11.99 11.99 0 000 8.28l3.66-1.84z"
-                    />
-                    <path             fill="#EA4335"
+                  />
+                  <path fill="#EA4335"
                     d="M12 4.77c1.62 0 3.08.56 4.23 1.66l3.17-3.17C17.45 1.5 14.97.5 12 .5 7.7.5 3.99 3.97 2.18 7.86l3.66 1.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    />
+                  />
                 </svg>
                 Sign up with Google
-                </button>
+              </button>
             </div>
-            </div>
+          </div>
         </form>
-        </div>
+      </div>
     </div>
-    );
+  );
 }

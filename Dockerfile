@@ -1,12 +1,23 @@
-FROM node:20-alpine AS builder
+# Stage 1: Build Next.js app
+FROM node:18-alpine AS builder
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
+
+COPY package.json package-lock.json ./
+RUN npm install --frozen-lockfile
+
 COPY . .
 RUN npm run build
-RUN npm run export -o out
 
-FROM nginx:stable-alpine
-COPY --from=builder /app/out /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# Stage 2: Use Next.js standalone build
+FROM node:18-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+# Copy only necessary files from builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+CMD ["node", "server.js"]

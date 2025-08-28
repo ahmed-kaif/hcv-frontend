@@ -39,7 +39,7 @@ export default function Profile() {
             const isAdmin = response.data.is_admin || response.data.admin || response.data.role === 'admin';
             if (isAdmin) {
                 console.log('Fetching all users because user is admin');  // Debug log
-                const usersResponse = await api.get('/users');
+                const usersResponse = await api.get('/users/');
                 console.log('All users:', usersResponse.data);  // Debug log
                 setAllUsers(usersResponse.data);
             }

@@ -21,12 +21,12 @@ export default function Predict() {
     CHE: '',
     CGT: '',
     // Optional fields
-    CREA: 0,
-    CHOL: 0,
-    PROT: 0,
-    BIL: 0,
-    ALT: 0,
-    Age: 0,
+    CREA: '',
+    CHOL: '',
+    PROT: '',
+    BIL: '',
+    ALT: '',
+    Age: '',
     Sex: 'M'
   });
 
@@ -38,7 +38,7 @@ export default function Predict() {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: name === 'Sex' ? value : parseFloat(value) || 0
+      [name]: name === 'Sex' ? value : value === '' ? '' : parseFloat(value)
     });
     setError('');
   };
@@ -49,7 +49,7 @@ export default function Predict() {
     setError('');
     setPrediction(null);
 
-    // Validate required fields
+    // required fields
     if (!formData.ALB || !formData.ALP || !formData.AST || !formData.CHE || !formData.CGT) {
       setError('Please fill in all required fields');
       setLoading(false);
@@ -57,7 +57,13 @@ export default function Predict() {
     }
 
     try {
-      const response = await api.post('/predictions/', formData);
+      // Convert empty string values to 0 for the API call
+      const dataToSend = Object.entries(formData).reduce((acc, [key, value]) => {
+        acc[key] = value === '' ? 0 : value;
+        return acc;
+      }, {});
+      
+      const response = await api.post('/predictions/', dataToSend);
       setPrediction(response.data);
     } catch (err) {
       setError(err.response?.data?.detail || 'Prediction failed. Please try again.');
@@ -96,7 +102,7 @@ export default function Predict() {
                       step="0.01"
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="e.g., 47"
+                      placeholder="e.g., 47 g/dL"
                     />
                   </div>
 
@@ -112,7 +118,7 @@ export default function Predict() {
                       step="0.01"
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder='e.g., 37.9'
+                      placeholder='e.g., 37.9 U/L'
                     />
                   </div>
 
@@ -128,7 +134,7 @@ export default function Predict() {
                       step="0.01"
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="e.g., 7.1"
+                      placeholder="e.g., 7.1 U/L"
                     />
                   </div>
 
@@ -144,7 +150,7 @@ export default function Predict() {
                       step="0.01"
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="e.g., 6.6"
+                      placeholder="e.g., 6.6 U/L"
                     />
                   </div>
 
@@ -160,7 +166,7 @@ export default function Predict() {
                       step="0.01"
                       required
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="e.g., 12.1"
+                      placeholder="e.g., 12.1 U/L"
                     />
                   </div>
                 </div>
@@ -183,7 +189,7 @@ export default function Predict() {
                       onChange={handleChange}
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="0"
+                      placeholder="0 mg/dL"
                     />
                   </div>
 
@@ -198,7 +204,7 @@ export default function Predict() {
                       onChange={handleChange}
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="0"
+                      placeholder="0 mg/dL"
                     />
                   </div>
 
@@ -213,7 +219,7 @@ export default function Predict() {
                       onChange={handleChange}
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="0"
+                      placeholder="0 mg/dL"
                     />
                   </div>
 
@@ -228,7 +234,7 @@ export default function Predict() {
                       onChange={handleChange}
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="0"
+                      placeholder="0 mg/dL"
                     />
                   </div>
 
@@ -243,7 +249,7 @@ export default function Predict() {
                       onChange={handleChange}
                       step="0.01"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="0"
+                      placeholder="0 U/L"
                     />
                   </div>
 
@@ -259,7 +265,7 @@ export default function Predict() {
                       min="0"
                       max="120"
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 font-medium placeholder-gray-400"
-                      placeholder="0"
+                      placeholder="0 years"
                     />
                   </div>
 

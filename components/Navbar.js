@@ -27,7 +27,7 @@ export default function Navbar() {
   const { user, logout, loading } = useAuth();
 
   return (
-    <nav className="max-w-6xl mx-auto bg-white">
+    <nav className="max-w-4xl mx-auto bg-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           <Link href="/" className="text-xl font-bold text-blue-600">
